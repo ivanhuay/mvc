@@ -3,10 +3,17 @@
 class bootstrap{
 	function __construct()
 	{
-		$url=$_GET['url'];
+		$url=(isset($_GET['url']))?$_GET['url']:NULL;
 		$url=rtrim($url,'/');
-		$url=explode('/',$_GET['url']);
+		$url=explode('/',$url);
 		echo "$url[0]<br>";
+
+		if(empty($url[0]))
+		{
+			require(APPFOLDER.'controllers/index.php');
+			$controller=new Index();
+			return FALSE;
+		}
 
 		$file='application/controllers/'.$url[0].'.php';
 		if(file_exists($file))

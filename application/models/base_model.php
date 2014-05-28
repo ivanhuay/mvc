@@ -1,9 +1,13 @@
 <?php
 
-class Base_Model()
+class Base_Model extends Model
 {
 	function __construct()
 	{
-		echo "modelo base";
+		parent::__construct();
+	}
+	public function write($text)
+	{
+		echo $text;
 	}
 }
