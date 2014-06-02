@@ -8,7 +8,7 @@ class Controller{
 	{
 		self::$instance =& $this;
 
-		echo "Main Controller<br>";
+		
 		$this->load=new Load();
 	}
 	public static function get_instance()

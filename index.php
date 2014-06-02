@@ -8,7 +8,13 @@ require(SYSTEM.'core/model.php');
 require(SYSTEM.'core/controller.php');
 require(SYSTEM.'core/view.php');
 
-require('application/libs/bootstrap.php');
+require(SYSTEM.'core/bootstrap.php');
+
+
+//configuraciones 
+
+require(APPFOLDER.'config/paths.php');
+require(APPFOLDER.'config/database.php');
 $app =new Bootstrap();
 
 //referencia

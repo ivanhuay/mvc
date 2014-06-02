@@ -12,6 +12,7 @@ class bootstrap{
 		{
 			require(APPFOLDER.'controllers/index.php');
 			$controller=new Index();
+			$controller->index();
 			return FALSE;
 		}
 
@@ -30,10 +31,22 @@ class bootstrap{
 		
 		if(isset($url[2]))
 		{
-			$controller->{$url[1]}($url[2]);
+			if(method_exists($controller,$url[1]))
+			{
+				$controller->{$url[1]}($url[2]);
+			}else
+			{
+				echo "errr";
+			}
+			
+			return FALSE;
 		}else if (isset($url[1]))
 		{
 			$controller->{$url[1]}();
+			return FALSE;
+		}else
+		{
+			$controller->index();
 		}
 	}
 }

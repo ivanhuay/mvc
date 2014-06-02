@@ -1,7 +1,14 @@
 <?php
-class Error{
+class Error extends Controller{
 	function __construct()
 	{
-		echo "<p>Esto es un error</p>";
+		parent::__construct();
+	}
+	public function index()
+	{
+		
+
+		$data['error']="This page doesn't exist.";
+		$this->load->view('error/index');
 	}
 }
