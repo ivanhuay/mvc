@@ -10,6 +10,8 @@ require(SYSTEM.'core/view.php');
 
 require(SYSTEM.'core/bootstrap.php');
 
+require(SYSTEM.'core/database.php');
+require(SYSTEM.'core/session.php');
 
 //configuraciones 
 
