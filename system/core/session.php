@@ -5,9 +5,17 @@ class Session
 	{
 		@session_start();
 	}
-	public static function set($key,$value)
+	public static function set($key,$value = NULL)
 	{
-		$_SESSION[$key]=$value;
+		if(is_array($key))
+		{
+			foreach ($key as $key => $subvalue) {
+				$_SESSION[$key]=$subvalue;		
+			}
+		}else
+		{
+			$_SESSION[$key]=$value;
+		}
 	}
 	public static function get($key)
 	{

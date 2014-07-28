@@ -6,12 +6,23 @@ class bootstrap{
 		$url=(isset($_GET['url']))?$_GET['url']:NULL;
 		$url=rtrim($url,'/');
 		$url=explode('/',$url);
-		echo "$url[0]<br>";
+		require(APPFOLDER."config/routes.php");
 
 		if(empty($url[0]))
 		{
-			require(APPFOLDER.'controllers/index.php');
-			$controller=new Index();
+			$defapp=$config['routes']['default_routes'];
+			$file_def=APPFOLDER.$defapp;
+
+
+			if($defapp!='' && file_exists($file_def))
+			{
+				require($file_def);
+				$controller = new $defapp;
+			}else
+			{
+				require(APPFOLDER.'controllers/index.php');
+				$controller=new Index();
+			}
 			$controller->index();
 			return FALSE;
 		}
