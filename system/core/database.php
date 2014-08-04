@@ -1,8 +1,31 @@
-<?php
-class Database extends PDO
+<?
+class Database extends mysqli
 {
-	function __construct(){
-		parent:: __construct(DB_TYPE.':host='.DB_HOST.';dbname='.DB_NAME,DB_USER,DB_PASS);
+	function __construct($database = DB_NAME){
+		parent:: __construct(DB_HOST,DB_USER,DB_PASS,$database);
+		if ($mysqli->connect_errno) {
+		    printf("Connect failed: %s\n", $mysqli->connect_error);
+		    exit();
+		}
 	}
+	public function new_query($sql){
+		$resp = $this->query($sql);
+		if (!$resp) {
+		    printf("Errormessage: %s\n", $this->error);
+		}else
+		{
+			return $resp;
+		}
+	}
+	public function fetch_all($result)
+        {
+    		$res=array();
+			while ($row = $result->fetch_assoc()) {
+				$res[]=$row;
+           	}
+
+            return $res;
+            
+        }
 
 }
