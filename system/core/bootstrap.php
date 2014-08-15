@@ -10,8 +10,8 @@ class bootstrap{
 
 		if(empty($url[0]))
 		{
-			$defapp=$config['routes']['default_routes'];
-			$file_def=APPFOLDER.$defapp;
+			$defapp=$config['routes']['default_controller'];
+			$file_def=APPFOLDER."controllers/".$defapp.".php";
 
 
 			if($defapp!='' && file_exists($file_def))
