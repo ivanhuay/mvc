@@ -9,8 +9,8 @@ class Controller{
 		self::$instance =& $this;
 
 		
-		$this->load = new Load();
-		$this->session = new Session();
+		$this->load=new Load();
+		$this->session=new Session();
 	}
 	public static function get_instance()
 	{

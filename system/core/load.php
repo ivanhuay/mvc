@@ -17,30 +17,30 @@ class Load
 			return;
 		}
 		
-		$file=APPFOLDER.'views/'.$view.'.php';
-		if(file_exists($file))
+		$_file=APPFOLDER.'views/'.$view.'.php';
+		if(file_exists($_file))
 		{
 			//transforma el array asociativo en variables para la vista
 			extract($data);
-			require($file);
+			require($_file);
 		}
 	}
 	public function model($model)
 	{
-		$file=APPFOLDER.'models/'.$model.'.php';
-		if(file_exists($file))
+		$_file=APPFOLDER.'models/'.$model.'.php';
+		if(file_exists($_file))
 		{
-			require($file);
+			require($_file);
 			$Ctr= get_instance();
 			$Ctr->{$model}=new $model;
 		}
 	}
 	public function helper($helper)
 	{
-		$file=APPFOLDER.'helper/'.$helper.'.php';
-		if(file_exists($file))
+		$_file=APPFOLDER.'helper/'.$helper.'.php';
+		if(file_exists($_file))
 		{
-			require_once($file);
+			require_once($_file);
 		}
 	}
 }

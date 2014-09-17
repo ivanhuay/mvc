@@ -11,9 +11,8 @@ class bootstrap{
 		if(empty($url[0]))
 		{
 			$defapp=$config['routes']['default_controller'];
-			$file_def=APPFOLDER."controllers/".$defapp.".php";
-
-
+			$file_def=APPFOLDER.'controllers/'.$defapp.'.php';
+			
 			if($defapp!='' && file_exists($file_def))
 			{
 				require($file_def);
