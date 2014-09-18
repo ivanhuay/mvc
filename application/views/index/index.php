@@ -36,6 +36,19 @@
 	<pre>
 		echo $cantidad;//nos devuelve un 2000
 	</pre>
+	<h4>Templates para vistas</h4>
+	<p>Para crear templates debemos crear un archivo dentro de la carpeta application/view/template y dentro declarar un array
+	de nombre template:</p>
+	<pre>
+		$template=array("index/header","view","index/footer");
+	</pre>
+	<p>Cada elemento del array es una vista que se carga, el elemento view sera rempazado por la vista que queremos que se cargue dentro del
+	template, para cargar un template usamos el metodo load:</p>
+	<pre>
+		$this->load->template("example","example_template");//el primer parametro es el template y el segundo es la vista
+		//adicionalmente se le puede pasar un tercer parametro que se pasa a cada una de las vistas.
+
+	</pre>
 	<h4>Crear un Modelo</h4>
 	<p>para crear un modelo es necesario configurar el archivo de la base de datos en application/config/database.php</p>
 	<p>Luego de poner adecuadamente los datos para la conexion creamos el modelo:</p>

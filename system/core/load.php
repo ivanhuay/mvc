@@ -12,7 +12,7 @@ class Load
 		{
 			foreach ($_view as $babe)
 			{
-				$this->view($babe);
+				$this->view($babe,$data);
 			}
 			return;
 		}
@@ -54,6 +54,15 @@ class Load
 				if($template[$i]!="view"){
 					$this->view($template[$i],$_data);
 				}else{
+					
+					if (is_array($_view))
+					{
+						foreach ($_view as $babe)
+						{
+							$this->view($babe,$data);
+						}
+						return;
+					}
 					$this->view($_view,$_data);
 				}
 			}
