@@ -6,7 +6,7 @@ define('APPFOLDER','application/');
 require(SYSTEM.'core/load.php');
 require(SYSTEM.'core/model.php');
 require(SYSTEM.'core/controller.php');
-require(SYSTEM.'core/view.php');
+
 
 require(SYSTEM.'core/bootstrap.php');
 
