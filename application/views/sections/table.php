@@ -3,23 +3,21 @@ if (count($table)!=0)
 {
 ?>
 <table class="<?=isset($class)?$class:"";?>">
-  <thead>
-    
-    <tr>
+  
     <?
     $ini=0;
     if(isset($header))
     {
+      echo "<thead><tr>";
       $order=array();
       foreach ($header as $key=>$value) {
         $order[]=$value;
         echo "<th class='header'>".$key."</th>";
       }
       $ini++;
+      echo "</tr></thead>";
     }
     ?>
-    </tr>
-  </thead>
   
     <?
     if(isset($order) && !is_array($table[0]))
@@ -30,7 +28,7 @@ if (count($table)!=0)
         for($i=0;$i<count($order);$i++)
         {  
           $td_data=(isset($round) && is_numeric($row->$order[$i]) && !is_int($row->$order[$i]))?round($row->$order[$i],$round):$row->$order[$i];
-          echo "<td>".$td_data."</td>";
+          echo "<td>".utf8_encode($td_data)."</td>";
         }
         echo "</tr>";
       }
@@ -41,7 +39,7 @@ if (count($table)!=0)
         for($i=0;$i<count($order);$i++)
         {  
           $td_data=(isset($round) && is_numeric($row[$order[$i]]) && !is_int($row[$order[$i]]))?round($row[$order[$i]],$round):$row[$order[$i]];
-          echo "<td>".$td_data."</td>";
+          echo "<td>".utf8_encode($td_data)."</td>";
         }
         echo "</tr>";
       }
@@ -49,7 +47,7 @@ if (count($table)!=0)
     {
       echo "<thead><tr>";
       foreach ($table[0] as $key => $value) {
-        echo "<th class='header'>".$key."</td>";
+        echo "<th class='header'>".ucwords($key)."</td>";
       }
       echo "</tr></thead>
 
@@ -59,7 +57,7 @@ if (count($table)!=0)
         foreach($row as $key=>$value)
         {
           $td_data=(isset($round) && is_numeric($value) && !is_int($value))?round($value,$round):$value;
-          echo "<td>".$value."</td>";
+          echo "<td>".utf8_encode($value)."</td>";
         }
         echo "</tr>";
       }
