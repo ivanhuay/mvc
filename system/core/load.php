@@ -32,7 +32,7 @@ class Load
 		{
 			require($_file);
 			$Ctr= get_instance();
-			$Ctr->{$model}=new $model;
+			$Ctr->{$_model}=new $_model;
 		}
 	}
 	public function helper($_helper)
