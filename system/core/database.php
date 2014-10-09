@@ -3,8 +3,8 @@ class Database extends mysqli
 {
 	function __construct($database = DB_NAME){
 		parent:: __construct(DB_HOST,DB_USER,DB_PASS,$database);
-		if ($mysqli->connect_errno) {
-		    printf("Connect failed: %s\n", $mysqli->connect_error);
+		if ($this->connect_errno) {
+		    printf("Connect failed: %s\n", $this->connect_error);
 		    exit();
 		}
 	}
