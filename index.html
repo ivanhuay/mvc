@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Plank by ivanhuay</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Plank</h1>
+        <h2>PHP framework, thinking for the developers.</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/ivanhuay/plank/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/ivanhuay/plank/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/ivanhuay/plank" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="plank" class="anchor" href="#plank" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plank</h1>
+
+<h1>
+<a id="welcome" class="anchor" href="#welcome" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome</h1>
+
+<p>Este es un pequeño framework mvc en desarrollo con fines practicos pero proximamente tendra implementaciones interesantes</p>
+
+<h1>
+<a id="uso" class="anchor" href="#uso" aria-hidden="true"><span class="octicon octicon-link"></span></a>Uso</h1>
+
+<p>-Crear un controlador</p>
+
+<p>Dentro de la carpeta application/puedes crear un archivo con el nombre del controlador que deses crear, este mismo controlador sera utilizado al indicar <a href="http://url.axample/controller">http://url.axample/controller</a>.
+El controlador debe tener el formato basico:</p>
+
+<pre><code>class Example extends Controller{
+    function __construct(){
+        parent::__construct();
+    }
+    public function index(){
+        $this-&gt;load-&gt;view("inicio/index");
+    }
+}
+</code></pre>
+
+<h1>
+<a id="cargar-vistas-y-modelos" class="anchor" href="#cargar-vistas-y-modelos" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cargar vistas y modelos</h1>
+
+<p>Dentro de cada controlador es posible cargar vistas y modelos usando el metodo load:</p>
+
+<pre><code>$this-&gt;load-&gt;view("index");//esto carga la vista, usando la ruta dentro de la carpeta application/views
+$this-&gt;load-&gt;model("login_model");//esto carga un model de la carpeta application/model
+</code></pre>
+
+<p>Las vistas pueden recivir parametros desde el controlador pasando un array asociativo a la funcion</p>
+
+<pre><code>$data["cantidad"] = 2000;
+$this-&gt;load-&gt;view("examples/index",$data);
+</code></pre>
+
+<p>Esto se ve en la vista como una variable normal</p>
+
+<pre><code>echo $cantidad;//nos devuelve un 2000
+</code></pre>
+
+<h1>
+<a id="templates-para-vistas" class="anchor" href="#templates-para-vistas" aria-hidden="true"><span class="octicon octicon-link"></span></a>Templates para vistas</h1>
+
+<p>Para crear templates debemos crear un archivo dentro de la carpeta application/view/template y dentro declarar un array
+de nombre template:</p>
+
+<pre><code>    $template=array("index/header","view","index/footer");
+</code></pre>
+
+<p>Cada elemento del array es una vista que se carga, el elemento view sera rempazado por la vista que queremos que se cargue dentro del
+template, para cargar un template usamos el metodo load:</p>
+
+<pre><code>$this-&gt;load-&gt;template("example","example_template");//el primer parametro es el template y el segundo es la vista
+//adicionalmente se le puede pasar un tercer parametro que se pasa a cada una de las vistas.
+</code></pre>
+
+<h1>
+<a id="crear-un-modelo" class="anchor" href="#crear-un-modelo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Crear un Modelo</h1>
+
+<p>para crear un modelo es necesario configurar el archivo de la base de datos en application/config/database.php
+Luego de poner adecuadamente los datos para la conexion creamos el modelo:</p>
+
+<pre><code>Class Login_model extends Model{
+    function __construct(){
+        parent::__construct();
+    }
+    function buscar usuarios($usuarios){
+        $usuarios = $this-&gt;db-&gt;new_query("SELECT * FROM users");
+        return $this-&gt;db-&gt;fetch_all($usuarios);//metod creado para hacer un fetch all usando mysqli
+    }
+}
+</code></pre>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
