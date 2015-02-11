@@ -39,7 +39,7 @@ class bootstrap{
 		}
 		
 		$controller= new $url[0];
-		if($this->serachInArray($config["only_index"],$controller)){
+		if($this->serachInArray($config["only_index"],$url[0])){
 			if(isset($url[3])){
 			
 				$controller->index($url[1],$url[2],$url[3]);
