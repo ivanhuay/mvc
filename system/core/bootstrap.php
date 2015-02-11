@@ -7,6 +7,7 @@ class bootstrap{
 		$url=rtrim($url,'/');
 		$url=explode('/',$url);
 		require(APPFOLDER."config/routes.php");
+		require(APPFOLDER."config/only_index_controller.php");
 
 		if(empty($url[0]))
 		{
@@ -38,29 +39,61 @@ class bootstrap{
 		}
 		
 		$controller= new $url[0];
-		if(isset($url[3])){
-			if(method_exists($controller,$url[1]))
+		if($this->serachInArray($config["only_index"],$controller)){
+			if(isset($url[3])){
+			
+				$controller->index($url[1],$url[2],$url[3]);
+					
+			}else if(isset($url[2]))
 			{
-				$controller->{$url[1]}($url[2],$url[3]);
-			}	
-		}else if(isset($url[2]))
-		{
-			if(method_exists($controller,$url[1]))
+				
+				$controller->index($url[1],$url[2]);
+
+				return FALSE;
+				
+			}else if (isset($url[1]))
 			{
-				$controller->{$url[1]}($url[2]);
+				$controller->index($url[1]);
+				
+				return FALSE;
 			}else
 			{
-				echo "errr";
+				$controller->index();
 			}
-			
-			return FALSE;
-		}else if (isset($url[1]))
-		{
-			$controller->{$url[1]}();
-			return FALSE;
-		}else
-		{
-			$controller->index();
+		}else{
+
+			if(isset($url[3])){
+				if(method_exists($controller,$url[1]))
+				{
+					$controller->{$url[1]}($url[2],$url[3]);
+				}	
+			}else if(isset($url[2]))
+			{
+				if(method_exists($controller,$url[1]))
+				{
+					$controller->{$url[1]}($url[2]);
+				}else
+				{
+					echo "errr";
+				}
+				
+				return FALSE;
+			}else if (isset($url[1]))
+			{
+				$controller->{$url[1]}();
+				return FALSE;
+			}else
+			{
+				$controller->index();
+			}
 		}
+	}
+	function serachInArray($array = array(), $search = FALSE){
+		if($search){
+			for($i = 0; $i< count($array);$i++){
+				if($search == $array[$i])return TRUE;
+			}
+		}
+		return FALSE;
 	}
 }
