@@ -1,6 +1,6 @@
 <?php
 
-class bootstrap{
+class Plank{
 	function __construct()
 	{
 		$url=(isset($_GET['url']))?$_GET['url']:NULL;
