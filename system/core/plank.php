@@ -3,9 +3,9 @@
 class Plank{
 	function __construct()
 	{
-		$url=(isset($_GET['url']))?$_GET['url']:NULL;
-		$url=rtrim($url,'/');
-		$url=explode('/',$url);
+
+		$url = $this->urlManage();
+		
 		require(APPFOLDER."config/routes.php");
 		require(APPFOLDER."config/only_index_controller.php");
 
@@ -95,5 +95,15 @@ class Plank{
 			}
 		}
 		return FALSE;
+	}
+	//manage url to get controllers
+	function urlManage(){
+		$fullurl = $_SERVER['PHP_SELF'];
+		if(!$fullurl || !isset($fullurl) || empty($fullurl))return array();
+		$parseUrl = explode('index.php', $fullurl);
+		if(count($parseUrl)<2)return array();
+		$url = trim($parseUrl[1],'/');
+		$url = explode('/',$url);
+		return $url;
 	}
 }
