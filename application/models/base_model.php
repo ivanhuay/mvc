@@ -1,5 +1,4 @@
 <?php
-
 class Base_Model extends Model
 {
 	function __construct()

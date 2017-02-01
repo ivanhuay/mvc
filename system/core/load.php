@@ -1,11 +1,6 @@
 <?php
 class Load
 {
-	function __construct()
-	{
-		
-	}
-
 	public function view($_view,$_data=array()){
 
 		if (is_array($_view))
@@ -16,7 +11,7 @@ class Load
 			}
 			return;
 		}
-		
+
 		$_file=APPFOLDER.'views/'.$_view.'.php';
 		if(file_exists($_file))
 		{
@@ -54,7 +49,7 @@ class Load
 				if($template[$i]!="view"){
 					$this->view($template[$i],$_data);
 				}else{
-					
+
 					if (is_array($_view))
 					{
 						foreach ($_view as $babe)

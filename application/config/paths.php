@@ -1,3 +1,2 @@
 <?php
-
-	define('URL','http://localhost/plank');
+define('URL', 'http://localhost/plank');

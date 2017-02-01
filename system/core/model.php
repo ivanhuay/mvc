@@ -1,9 +1,11 @@
 <?php
-class Model
+
+class Model extends BaseClass
 {
-	function __construct()
-	{
-		$this->db=new Database();
-		$this->session=new Session();
-	}
+    public function __construct()
+    {
+        parent::__construct();
+        $this->db = new Database();
+        $this->session = new Session();
+    }
 }

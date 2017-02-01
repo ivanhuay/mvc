@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 *==========================================================
 *escribir en el array de configuracion los nombres de los==

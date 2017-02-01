@@ -1,5 +1,4 @@
 <?php
-
 class Index extends Controller
 {
 	function __construct()
@@ -8,6 +7,9 @@ class Index extends Controller
 	}
 	public function index()
 	{
+		$this->logger->info('test');
+		$this->logger->warning('test warning');
+		$this->logger->error('test error');
 		$this->load->view('index/index');
 	}
 }

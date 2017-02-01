@@ -6,8 +6,6 @@ class Error extends Controller{
 	}
 	public function index()
 	{
-		
-
 		$data['error']="This page doesn't exist.";
 		$this->load->view('error/index');
 	}

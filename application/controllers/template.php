@@ -1,4 +1,4 @@
-<?
+<?php
 class Template extends Controller
 {
 	function __construct(){
