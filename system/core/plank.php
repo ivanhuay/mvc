@@ -26,7 +26,7 @@ class Plank extends BaseClass
         }
 
         if ($url[0] == 'api') {
-            return $this->handleCollection($url);
+            return $this->handleCollection(array_slice($url,1));
         }
 
         $file = 'application/controllers/'.$url[0].'.php';
@@ -107,19 +107,14 @@ class Plank extends BaseClass
 
     private function handleCollection($url = [])
     {
-        if ($url[0] != 'api') {
-            $this->logger->error("first url path isn't api path on handleCollection");
-
-            return false;
-        }
-        $file = $this->collectionFile($url[1]);
+        $file = $this->collectionFile($url[0]);
         if (!$file) {
             $this->logger->error('no collection found');
         }
 
         require $file;
-        $collection = new $url[1]();
-        $collection->handleRequest();
+        $collection = new $url[0]();
+        $collection->handleRequest(array_slice($url,1));
     }
 
     private function collectionFile($collection)

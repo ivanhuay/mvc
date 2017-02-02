@@ -2,41 +2,31 @@
 
 class Collection extends Rest
 {
-    public function __construct($collectionName = null, $enabledMethod = null)
+    public function __construct($enabledMethod = ['GET', 'POST', 'PUT', 'DELETE'], $collectionName = null)
     {
-        parent::__construct($enabledMethod);
         if (empty($collectionName)) {
             $collectionName = get_called_class();
         }
+        parent::__construct(strtolower($collectionName), $enabledMethod);
         $this->collectionName = strtolower($collectionName);
-        $this->db = new Database();
         $this->structure = [];
     }
 
-    public function createTable()
+    private function createTable($collectionName, $structure)
     {
         $tableEstructure = '';
-        $tableEstructure = '';
+        if (!array_key_exists('_id', $structure)) {
+            $this->structure['_id'] = 'int auto_increment primary key';
+        }
 
         foreach ($this->structure as $key => $value) {
             $tableEstructure .= $key.' '.$value.',';
         }
-        $tableEstructure = trim($tableEstructure, ',');
-        $query = 'IF EXISTS(SELECT '.$this->collectionName."
-            FROM INFORMATION_SCHEMA.TABLES
-           WHERE table_schema = '".DB_NAME."'
-             AND table_name = '".$this->collectionName."')
-THEN
-   ....
-   ALTER TABLE Tablename...
-   ....
-ELSE
-   ....
-   CREATE TABLE ".$this->collectionName.'
-	 (
-'.$tableEstructure.'
-		 )
-END IF;';
+
+        $collectionName = $this->db->real_escape_string($collectionName);
+        $tableEstructure = $this->db->real_escape_string(trim($tableEstructure, ','));
+
+        $this->db->new_query('CREATE TABLE '.$collectionName.' ('.$tableEstructure.')');
     }
 
     private function backupTable($tableName = null)
@@ -49,33 +39,50 @@ END IF;';
             return false;
         }
 
-        $tableEstructure = '';
-
-        foreach ($this->structure as $key => $value) {
-            $tableEstructure .= $key.' '.$value.',';
-        }
-
-        $tableEstructure = trim($tableEstructure, ',');
-
         $tablesResult = $this->db->new_query('SHOW TABLES FROM '.DB_NAME.' WHERE Tables_in_'.DB_NAME." like '".$tableName."%'");
+        $count_tables = $tablesResult->num_rows;
 
-        $this->logger->info('Table Count: '.$tablesResult->num_rows);
+        $this->logger->info('Table Count: '.$count_tables);
 
-        if ($tablesResult->num_rows == 0) {
-            $this->db->new_query('CREATE TABLE '.$this->collectionName.'('.$tableEstructure.')');
+        if ($count_tables == 0) {
+            $this->createTable($this->collectionName, $this->structure);
         } else {
             $tableStructure = $this->db->new_query('describe '.$tableName);
+            $duplicatedTable = false;
+
             while ($row = $tableStructure->fetch_assoc()) {
                 if (array_key_exists($row['Field'], $this->structure)) {
-										
-                    $this->logger->info('Field: '.$row['Field'].' -> '.$this->structure[$row['Field']]." type ".$row["Type"]);
+                    $dbType = strtolower(preg_replace("/\([^)]+\)/", '', $row['Type']));
+                    $collectionFieldDetail = strtolower($this->structure[$row['Field']]);
+                    $this->logger->info('Field: '.$row['Field'].' -> '.$collectionFieldDetail.', type: '.$dbType);
+
+                    if (
+                      (strpos($collectionFieldDetail, $dbType) === false) ||
+                      (strpos($collectionFieldDetail, 'key') === false && !empty($row['Key']))
+                    ) {
+                        $this->logger->info('collectionField '.$row['Field']." change type from: $dbType, to: $collectionFieldDetail");
+                        if (!$duplicatedTable) {
+                            $this->db->duplicteTable($this->collectionName,  $this->collectionName.'_pbackup_'.$count_tables);
+                            $duplicatedTable = true;
+                        }
+                        $this->db->alterColumn($this->collectionName, $row['Field'], $collectionFieldDetail);
+                    }
+                } elseif ($row['Field'] != '_id') {
+                    $this->logger->info('field not exist '.$row['Field']);
+
+                    if (!$duplicatedTable) {
+                        $this->db->duplicteTable($this->collectionName, $this->collectionName.'_pbackup_'.$count_tables);
+                        $duplicatedTable = true;
+                    }
+                    $this->db->addColumn($this->collectionName, $row['Field'], $collectionFieldDetail);
                 }
             }
         }
     }
 
-    public function handleRequest()
+    protected function handleRequest($pathData = [])
     {
         $this->backupTable($this->collectionName);
+        parent::handleRequest($pathData);
     }
 }
