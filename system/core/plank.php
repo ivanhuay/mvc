@@ -2,6 +2,7 @@
 
 require APPFOLDER.'config/routes.php';
 require APPFOLDER.'config/only_index_controller.php';
+require SYSTEM.'core/error-manager.php';
 
 class Plank extends BaseClass
 {
@@ -33,9 +34,7 @@ class Plank extends BaseClass
         if (file_exists($file)) {
             require $file;
         } else {
-            require SYSTEM.'core/error.php';
-            $controller = new Error();
-
+            $controller = new ErrorManager();
             return false;
         }
 
