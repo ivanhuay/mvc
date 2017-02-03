@@ -8,6 +8,9 @@ class Plank extends BaseClass
 {
     public function __construct()
     {
+        parent::__construct();
+        global $config;
+
         $url = $this->urlManage();
 
         if (empty($url[0])) {
