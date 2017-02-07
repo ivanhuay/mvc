@@ -98,7 +98,7 @@ class Rest extends BaseClass
         }
     }
 
-    protected function respJson($arrayObject = [], $statusCode = 200)
+    public function respJson($arrayObject = [], $statusCode = 200)
     {
         header('HTTP/1.1 '.$statusCode);
         header('Content-type: application/json; charset=utf-8');

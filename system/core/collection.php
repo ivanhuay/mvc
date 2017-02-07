@@ -10,6 +10,7 @@ class Collection extends Rest
         parent::__construct(strtolower($collectionName), $enabledMethod);
         $this->collectionName = strtolower($collectionName);
         $this->structure = [];
+        $this->validation = [];
     }
 
     private function createTable($collectionName, $structure)
@@ -80,8 +81,82 @@ class Collection extends Rest
         }
     }
 
+    public function validate($pathData = [])
+    {
+        $method = $_SERVER['REQUEST_METHOD'];
+        $data = $this->getData($pathData);
+        foreach ($this->validation as $key => $validationDetail) {
+            $this->logger->info('validationKey: '.$key);
+            if (array_key_exists($key, $data)) {
+                foreach ($validationDetail as $validationType => $espectedValue) {
+                    $this->logger->info('validation type: '.$validationType.' required: '.$espectedValue.' - data: '.$data[$key]);
+                    if (!$this->validateProp($validationType, $espectedValue, $data[$key])) {
+                        $this->respJson(['error' => true, 'message' => 'validation failed '.$validationType.'.', 'field' => $key, 'error_type' => 'validation', 'validation_type' => $validationType], 400);
+                    }
+                }
+            } elseif (!array_key_exists($key, $data) && array_key_exists('required', $validationDetail) && ($method == "POST")) {
+                $this->respJson(['error' => true, 'message' => 'missing parameter '.$key.'.', 'field' => $key, 'error_type' => 'validation', 'validation_type' => 'required'], 400);
+            }
+        }
+    }
+
+    protected function validateProp($validationType = '', $validationValue = '', $data = '')
+    {
+        switch ($validationType) {
+        case 'min_length':
+          return strlen($data) >= $validationValue;
+          break;
+        case 'max_length':
+          return strlen($data) <= $validationValue;
+          break;
+        case 'required':
+          return !empty($data);
+        default:
+          $this->logger->error('Error undefined validationType.');
+
+          return false;
+          break;
+      }
+    }
+
+    protected function getData($pathData = [])
+    {
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        switch ($method) {
+        case 'GET':
+          if (count($pathData) > 0) {
+              return ['_id' => $pathData[0]];
+          }
+
+          return [];
+          break;
+        case 'POST':
+          return $_POST;
+          break;
+        case 'PUT':
+          $_PUT = [];
+          parse_str(file_get_contents('php://input'), $_PUT);
+
+          return $_PUT;
+          break;
+        case 'DELETE':
+          if (count($pathData) > 0) {
+              return ['_id' => $pathData[0]];
+          }
+
+          return [];
+          break;
+        default:
+          $this->logger->error('validation error method.');
+          $this->respJson(['error' => true, 'message' => 'validation failed method.'], 400);
+          break;
+      }
+    }
+
     protected function handleRequest($pathData = [])
     {
+        $this->validate($pathData);
         $this->backupTable($this->collectionName);
         parent::handleRequest($pathData);
     }
