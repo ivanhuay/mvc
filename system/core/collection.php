@@ -88,13 +88,13 @@ class Collection extends Rest
         foreach ($this->validation as $key => $validationDetail) {
             $this->logger->info('validationKey: '.$key);
             if (array_key_exists($key, $data)) {
-                foreach ($validationDetail as $validationType => $espectedValue) {
-                    $this->logger->info('validation type: '.$validationType.' required: '.$espectedValue.' - data: '.$data[$key]);
-                    if (!$this->validateProp($validationType, $espectedValue, $data[$key])) {
-                        $this->respJson(['error' => true, 'message' => 'validation failed '.$validationType.'.', 'field' => $key, 'error_type' => 'validation', 'validation_type' => $validationType], 400);
+                foreach ($validationDetail as $validationType => $expectedValue) {
+                    $this->logger->info('validation type: '.$validationType.' required: '.$expectedValue.' - data: '.$data[$key]);
+                    if (!$this->validateProp($validationType, $expectedValue, $data[$key])) {
+                        $this->respJson(['error' => true, 'message' => 'validation failed '.$validationType.'.', 'field' => $key, 'error_type' => 'validation', 'validation_type' => $validationType, 'expected_value' => $expectedValue], 400);
                     }
                 }
-            } elseif (!array_key_exists($key, $data) && array_key_exists('required', $validationDetail) && ($method == "POST")) {
+            } elseif (!array_key_exists($key, $data) && array_key_exists('required', $validationDetail) && ($method == 'POST')) {
                 $this->respJson(['error' => true, 'message' => 'missing parameter '.$key.'.', 'field' => $key, 'error_type' => 'validation', 'validation_type' => 'required'], 400);
             }
         }
