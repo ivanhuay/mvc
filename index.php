@@ -1,9 +1,14 @@
 <?php
+
 define('SYSTEM', 'system/');
 define('APPFOLDER', 'application/');
-//configuraciones
+//load config
 require APPFOLDER.'config/paths.php';
-require APPFOLDER.'config/database.php';
+if (file_exists(APPFOLDER.'config/database_dev.php')) {
+    require APPFOLDER.'config/database_dev.php';
+} else {
+    require APPFOLDER.'config/database.php';
+}
 define('PUBDIR', URL.'public/');
 
 require SYSTEM.'core/database.php';
@@ -20,10 +25,9 @@ require SYSTEM.'core/collection.php';
 
 require SYSTEM.'core/plank.php';
 
-
 $app = new Plank();
 
-//referencia
+//reference
 function get_instance()
 {
     return Controller::get_instance();

@@ -1,10 +1,14 @@
 <?php
 
+require APPFOLDER.'config/collections.php';
+
 class Rest extends BaseClass
 {
     public function __construct($tableName = 'default', $enabledMethod = ['GET', 'POST', 'PUT', 'DELETE'])
     {
         parent::__construct();
+        global $config;
+        $this->config = $config['collections'];
         $this->tableName = $tableName;
         $this->enabledMethod = $enabledMethod;
         $this->db = new ORM();
@@ -12,21 +16,32 @@ class Rest extends BaseClass
 
     public function __call($method, $arguments)
     {
-        if (in_array($_SERVER['REQUEST_METHOD'], $this->enabledMethod)) {
+        if (in_array($_SERVER['REQUEST_METHOD'], $this->enabledMethod) || in_array($this->getToken(), $this->config['fullAccessToken'])) {
             $this->logger->info('Authorized - method:'.$method);
 
             return call_user_func_array(array($this, $method), $arguments);
         } else {
             $this->logger->info('Unauthorized access - method:'.$method.' request:'.$_SERVER['REQUEST_METHOD']);
+
             return $this->respJson(['message' => 'Unauthorized'], 401);
         }
     }
 
+    private function getToken()
+    {
+        $HEADERS = getallheaders();
+        if (array_key_exists('token', $_GET)) {
+            return $_GET['token'];
+        } elseif (array_key_exists('token', $HEADERS)) {
+            return $HEADERS['token'];
+        } else {
+            return false;
+        }
+    }
     protected function post()
     {
         $queryValues = '';
         $queryColumns = '';
-        $this->logger->info('post data : '.json_encode($_POST));
         foreach ($_POST as $key => $value) {
             $queryColumns .= $this->db->real_escape_string($key).',';
             $queryValues .= "'".$this->db->real_escape_string($value)."',";

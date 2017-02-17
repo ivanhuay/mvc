@@ -122,6 +122,31 @@ class Example extends Collection
     }
 }
 ```
+### Access rest methods
+A collection can receive in the parent constructor an array with the enabled methodss
+
+```php
+class Bands extends Collection
+{
+    public function __construct()
+    {
+        parent::__construct(['GET','POST']);
+        $this->structure = [
+          'fullname' => 'text',
+          'date2' => 'timestamp',
+          'lastname' => 'text'
+        ];
+        $this->validation = [
+          'fullname'=>["min_length"=>2,"max_length"=>100,"required"=>true],
+          'lastname'=>["required"=>true]
+        ];
+    }
+}
+```
+You can add an access token for all the methods in the configuration file
+
+    application/config/collection.php
+
 
 ### Use (MVC old functionality)
 [Detail on the wiki.](https://github.com/ivanhuay/plank/wiki/MVC-functionality)
